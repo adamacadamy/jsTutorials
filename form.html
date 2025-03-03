@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.8em;
+            display: none;
+        }
+        .input-error {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <form id="registrationForm" onsubmit="validateForm(event)">
+        <div>
+            <label for="fullName">Full Name:</label><br>
+            <input type="text" id="fullName" name="fullName">
+            <span id="nameError" class="error">Name must be at least 3 characters</span>
+        </div>
+        
+        <div>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email">
+            <span id="emailError" class="error">Please enter a valid email</span>
+        </div>
+        
+        <div>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password">
+            <span id="passwordError" class="error">Password must be at least 8 characters</span>
+        </div>
+        
+        <button type="submit">Submit</button>
+    </form>
+</body>
+<script>
+     const fullNameField = document.getElementById("fullName");
+     const emailField = document.getElementById("email");
+     const passwordField = document.getElementById("password");
+
+     let isFullNameFieldValid = true;
+     let isEmailFieldValid = true;
+     let isPasswordFieldValid = true;
+
+     fullNameField.addEventListener("keyup", (event) => {
+         
+        var value = fullNameField.value;
+        if(value.length < 3){
+            showError("fullName", "nameError")
+            isFullNameFieldValid = false;
+        }
+        if(value.length >= 3){
+            resetError("fullName", "nameError");
+            
+            isFullNameFieldValid = true; 
+        }
+     });
+
+     emailField.addEventListener("keyup", (event) => {
+        var value = emailField.value;
+
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        // not python in javascript !
+        if(!emailPattern.test(value)){
+            showError('email', 'emailError');
+            isEmailFieldValid = false;
+
+        }
+        
+        if(emailPattern.test(value)){
+
+            resetError('email', 'emailError');
+            
+            isEmailFieldValid = true; 
+        }
+     
+     });
+
+     passwordField.addEventListener("keyup", (event) => {
+            var value = passwordField.value; 
+            if(value.length < 8){
+                
+                showError('password', 'passwordError');
+                isPasswordFieldValid = false;
+            }
+            if(value.length >=8){
+
+            resetError('password', 'passwordError');
+            
+            isPasswordFieldValid = true; 
+            }
+
+     });
+
+     const validateForm = (event) => {
+        event.preventDefault(); // Prevent form submission
+        var isFormValid = isPasswordFieldValid && isEmailFieldValid && isFullNameFieldValid;
+        if(!isFormValid){
+            showError();
+        } 
+        else{
+            alert("form working");
+        }
+
+     }
+
+     const showError = (inputFieldId, errorFieldId) => {
+        
+        let inputs = document.getElementsByTagName('input'); // list of fields
+        let errors = document.getElementsByClassName('error'); // list of fields
+
+      if(inputFieldId != undefined && errorFieldId != undefined){
+            inputs = [document.getElementById(inputFieldId)];
+            errors=  [document.getElementById(errorFieldId)];
+        }
+     
+             
+        for(let input of inputs){
+            input.classList.add('input-error'); 
+        }
+
+        for(let error of errors){
+            error.style.display = 'block'; 
+        }
+     }
+
+     const resetError = (inputFieldId, errorFieldId) =>{
+        
+        let inputs = document.getElementsByTagName('input'); // list of fields
+        let errors = document.getElementsByClassName('error'); // list of fields
+
+        if(inputFieldId != undefined && errorFieldId != undefined){
+
+            inputs = [document.getElementById(inputFieldId)];
+            errors=  [document.getElementById(errorFieldId)];
+        }
+    
+
+        
+        for(let input of inputs){
+            input.classList.remove('input-error'); 
+        }
+
+        for(let error of errors){
+            error.style.display = 'none'; 
+        }
+     }
+
+</script>
+</html>
