@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .success{
+            background-color: green;
+        }
+        .error{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="myInput"> <br/> <br/>
+    <select id="mySelect">
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </select> <br/> <br/>
+      <input type="text" id="myTextAreaInput" value="Cut this text">
+</body>
+<script>
+ 
+    document.querySelector("#myTextAreaInput").addEventListener("input", (event) =>{
+        //event.target
+        event.target.classList.add("success");
+        console.log(event.target.classList);
+        
+        event.target.classList.remove("success");
+        console.log(event.target.classList);
+        
+        event.target.classList.add("error");
+        event.target.classList.remove("success");
+
+    });
+    document.querySelector("#myTextAreaInput").addEventListener("cut", (event) =>{
+        console.log(`text-area: cut ${event}`);
+    });
+
+    document.querySelector("#myInput").addEventListener("input", (event) =>{
+        event.target.setAttribute("data", "{x:y}");
+        console.log(event.target.getAttribute("data"));
+    });
+    
+  //  document.querySelector("#myInput").addEventListener("focus", (event) =>{
+     //   console.log(`focus: event: ${event}`);
+    //});
+    
+    //document.querySelector("#myInput").addEventListener("blur", (event) =>{
+       // console.log(`blur: event: ${event}`);
+    //});
+  
+ 
+    //document.querySelector("#myInput").addEventListener("keypress", (event) =>{
+     //   console.log(`keypress: event: ${event}`);
+    //});
+    //document.querySelector("#myInput").addEventListener("keydown", (event) =>{
+     //   console.log(`keydown: event: ${event}`);
+   // });
+ 
+    //document.querySelector("#myInput").addEventListener("keyup", (event) =>{
+    //    console.log(`keyup: event: ${event}`);
+    //});
+ 
+ 
+    //document.querySelector("#myInput").addEventListener("paste", (event) =>{
+    //    console.log(`input: paste: ${event}`);
+    //});
+ 
+    //document.querySelector("#myInput").addEventListener("click", (event) =>{
+    //    console.log(`input: click: ${event}`);
+    //});
+
+   // document.querySelector("#myInput").addEventListener("keyup", (event) =>{
+   //     console.log(`keyup: event: ${event}`);
+   // });
+ 
+ 
+    document.querySelector("#mySelect").addEventListener("click", (event) =>{
+        console.log(`select: click: ${event}`);
+    });
+
+    
+    document.querySelector("#mySelect").addEventListener("select", (event) =>{
+        console.log(`select: click: ${event}`);
+    })
+
+</script>
+</html>

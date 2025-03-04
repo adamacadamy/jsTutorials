@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST HTTP Request Example</title>
+    <style>
+        .container{
+            max-width:  800px;
+            margin:  20px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        button{
+            margin: 5px;
+            padding:  5px 10px;
+        }
+        #output {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>REST API Example</h2>
+        <button onclick="getData()">GET DATA</button>
+        <button onclick="postData()">POST DATA</button>
+        <button onclick="putData()">PUT DATA</button>
+        <button onclick="deleteData()">DELETE DATA</button>
+        
+        <div id="output"><pre></pre></div>
+    </div>
+
+</body>
+<script>
+    const API_URL = 'https://jsonplaceholder.typicode.com/posts'; // Free test API
+    const output = document.querySelector("#output pre");
+    const displayResponse = (data) => {
+        //{"test": {}} => \"{\"test\": {}}\"
+        // simp
+        output.textContent = JSON.stringify(data, null, 2); 
+    }
+    const getData = async () => {
+        try{
+            //'https://jsonplaceholder.typicode.com/posts/1'
+            // fetch is js built in library for making http requests like python requests lib
+            const response = await fetch(`${API_URL}/1`);
+            // ! is js not statement like python `not`
+            //if(response.ok !== 200){
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            displayResponse(data);
+        }catch(error){
+            displayResponse(error);
+        }
+    }
+    const postData = () => {
+        const payload = {
+            title: 'New Post',
+            body: 'This is a new post created via POST request',
+            userId: 1
+        };
+        
+        //'https://jsonplaceholder.typicode.com/posts'
+        fetch(API_URL, {
+            method: "POST",
+            // similar to python json.dumps
+            body: JSON.stringify(payload)
+        })
+        // will return response
+        // the promise resolver then will process the response
+        .then((response)=>{
+            if(!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json()
+        })
+        // data = response.json()
+        // the second promise resolver will process return response.json()
+        .then((data) => {
+            displayResponse(data)
+        }).catch((error) =>{
+            displayResponse(error)
+        })
+
+    }
+    const putData = async () => {
+
+        const payload = {
+            id: 1,
+            title: 'Updated Post',
+            body: 'This post has been updated',
+            userId: 1
+        };
+        
+        //'https://jsonplaceholder.typicode.com/posts/1'
+        const response =  await fetch(`${API_URL}/1`, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+        } )
+
+        if(!response.ok){
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        displayResponse(data);
+    }
+    const deleteData = () => {
+
+        fetch(`${API_URL}/1`, {
+            method: 'DELETE'
+        })
+        .then((response) => {
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            displayResponse({ message: 'Post deleted successfully' })
+        })
+        .catch((error) => {
+            displayResponse(error)
+        });
+    }
+</script>
+</html>
