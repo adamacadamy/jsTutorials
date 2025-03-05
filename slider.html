@@ -84,85 +84,62 @@
         <button class="next">&#10095;</button>
 
         <div class="dots">
-            <span class="dot" onclick="goToSlide(0)"></span>
-            <span class="dot" onclick="goToSlide(1)"></span>
-            <span class="dot"  onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="showSlide(0)"></span>
+            <span class="dot" onclick="showSlide(1)"></span>
+            <span class="dot "  onclick="showSlide(2)"></span>
         </div>
       
     </div>
 
     <script> 
-
         let currentIndex = 0;
-
+        
         const slides = document.querySelector(".slides");
         const totalSlides = document.querySelectorAll('.slide').length;
         const dots = document.querySelectorAll('.dot');
 
-        let autoSlideInterval;
-        
-        const startAutoSlide = () => { 
-            /***
-            setInterval = executes a function routinely [timely] every some time unit
-            **/
-            autoSlideInterval = setInterval(() => {moveSlide(1)}, 5000) // run function runRunSlideShow every 3000 milliseconds = 3 seconds
-
-        }
-        const resetAutoSlide = () => {
-            clearInterval();
-            startAutoSlide();
-
-        }
-        const updateDots = () => { 
-            
-            dots.forEach((dot, index)=>{
+        const updateDots = () => {
+            dots.forEach((dot, index) =>{
                 /**
-                 if active remove active if not add active
-                 dots = [dot1, dot2, dot3] [0, 1, 2]
+                if(index === currentIndex)
+                    dot.classList.add('active')
+                
+                if(index Q== currentIndex)
+                    dot.classList.remove('active')
                 */
-                dot.classList.toggle('active', index === currentIndex );
+                dot.classList.toggle('active', index === currentIndex)
             })
         }
-        const showSlide = (index) => { 
-            if(index >= totalSlides){
+        const showSlide = (index) => {
+            currentIndex = currentIndex + index; //1
+            if(currentIndex >= totalSlides){
                 currentIndex = 0;
             }
-            else if (index < 0){
-                currentIndex  = totalSlides - 1;
-            }
-            else{
-                currentIndex = index;
-            }
-
+            else if(currentIndex < 0){
+                currentIndex = totalSlides - 1;
+            } 
             const offset = -currentIndex * 100;
+            /**
+            1. const offset = -currentIndex * 100;
+             * if currentIndex = 0, offset = 0, no shift, slide
+             * if currentIndex = 1, offset = -100 => Move the slide left by  100% of its width
+             * if currentIndex = 2, offset = -200 =>  Moves further left by  100% of its width
+             */
             slides.style.transform = `translateX(${offset}%)`;
-            // highlight a dot relevant to the current image index
             updateDots()
         }
 
-        const moveSlide = (step) =>{ 
-            showSlide(currentIndex + step);
+        const startAutoSlide = () => { 
+            setInterval(() => {   showSlide(1) }, 5000);
         }
-        const goToSlide = (index) => {
-            showSlide(index);
-            resetAutoSlide();
-            
-        }
-        // start slide
-        showSlide(currentIndex);
-
         // bind moveSlide to prev and next buttons click event
-        document.querySelector('.prev').addEventListener('click',(event) =>{
-            moveSlide(-1);
-            resetAutoSlide();
-        } );
-        document.querySelector('.next').addEventListener('click',(event) =>{
-            console.log("next clicked");
-            moveSlide(1);
-            resetAutoSlide();
-            
-        } );
-        startAutoSlide();
+        document.querySelector('.prev').addEventListener('click', (event) => {
+            showSlide(-1)
+        })
+        document.querySelector('.next').addEventListener('click', (event) => {
+            showSlide(1)
+        });
+        startAutoSlide()
     </script>
 </body>
 </html>
